@@ -1,1 +1,1 @@
-# TechArtPanell
+# tech-pannel

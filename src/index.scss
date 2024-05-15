@@ -1,0 +1,10 @@
+// @import '../node_modules/prismjs/themes/prism-tomorrow';
+// @import './assets/scss/app.scss';
+
+@font-face {
+    font-family:IRANSans;
+    src: url(./assets/fonts/IRANSans.ttf) format('ttf');
+}
+body {
+    font-family: IRANSans !important;
+  }

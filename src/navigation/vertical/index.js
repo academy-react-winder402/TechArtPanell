@@ -20,6 +20,7 @@ export default [
     icon: <Layers size={20} />,
     navLink: "/home",
   },
+
   {
     id: "user",
     title: "مدیریت کاربران",
@@ -28,21 +29,9 @@ export default [
     children: [
       {
         id: "invoiceList",
-        title: "List",
+        title: "لیست کاربران",
         icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
+        navLink: "/user",
       },
     ],
   },
@@ -54,19 +43,7 @@ export default [
     children: [
       {
         id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
+        title: "لیست دوره ها",
         icon: <Circle size={12} />,
         navLink: "/apps/invoice/list",
       },
@@ -80,19 +57,7 @@ export default [
     children: [
       {
         id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
+        title: " خبر و مقاله",
         icon: <Circle size={12} />,
         navLink: "/apps/invoice/list",
       },
@@ -106,19 +71,7 @@ export default [
     children: [
       {
         id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
+        title: "همه اساتید",
         icon: <Circle size={12} />,
         navLink: "/apps/invoice/list",
       },
@@ -130,18 +83,6 @@ export default [
     icon: <MessageSquare size={20} />,
     navLink: "/comment",
     children: [
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
       {
         id: "invoiceList",
         title: "List",
@@ -161,19 +102,5 @@ export default [
     title: "تیکت ها",
     icon: <Mail size={20} />,
     navLink: "/second-page",
-  },
-  {
-    id: "smaplePage",
-    title: "Sample Page",
-    icon: <Airplay size={20} />,
-    // navLink: "/sample",
-    children: [
-      {
-        id: "invoiceList",
-        title: "List",
-        icon: <Circle size={12} />,
-        navLink: "/apps/invoice/list",
-      },
-    ],
   },
 ];

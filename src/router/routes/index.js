@@ -12,6 +12,8 @@ import PublicRoute from "@components/routes/PublicRoute";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
+import InvoiceList from "../../components/list/list";
+import InvoiceAdd from "../../components/add";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -46,7 +48,11 @@ const Routes = [
   },
   {
     path: "/user",
-    element: <h1>hi</h1>,
+    element: <InvoiceList />,
+  },
+  {
+    path: "/add",
+    element: <InvoiceAdd />,
   },
   {
     path: "/course",

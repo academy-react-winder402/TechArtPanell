@@ -8,6 +8,12 @@ export default [
     navLink: "/home",
   },
   {
+    id: "users",
+    title: "users",
+    icon: "",
+    navLink: "/user",
+  },
+  {
     id: "secondPage",
     title: "Second Page",
     icon: <Mail size={20} />,

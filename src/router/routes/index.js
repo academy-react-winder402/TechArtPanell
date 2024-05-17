@@ -14,6 +14,9 @@ import PublicRoute from "@components/routes/PublicRoute";
 import { isObjEmpty } from "@utils";
 import InvoiceList from "../../components/list/list";
 import InvoiceAdd from "../../components/add";
+import TableBasic from "../../components/coursList/corseList";
+import BlogList from "../../components/blog/list";
+import UsersList from "../../components/Teachers/list/index";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -56,19 +59,16 @@ const Routes = [
   },
   {
     path: "/course",
-    element: <h1>hi</h1>,
+    element: <TableBasic />,
   },
-  {
-    path: "/course",
-    element: <h1>hi</h1>,
-  },
+
   {
     path: "/post",
-    element: <Sample />,
+    element: <BlogList />,
   },
   {
     path: "/teacher",
-    element: <h1>hi</h1>,
+    element: <UsersList/>,
   },
   {
     path: "/comment",

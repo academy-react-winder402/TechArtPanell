@@ -1,10 +1,9 @@
 // ** React Imports
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 // ** Table Columns
-import { columns } from "../list/columns";
+import { columns } from "./columns";
 
 // ** Third Party Components
 import ReactPaginate from "react-paginate";
@@ -14,12 +13,42 @@ import DataTable from "react-data-table-component";
 // ** Reactstrap Imports
 import { Button, Input, Row, Col, Card } from "reactstrap";
 
-// ** Store & Actions
-import { getData } from "../store";
-
 // ** Styles
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+
+// ** نمونه داده‌های محلی
+const sampleData = [
+  {
+    id: 1,
+    invoiceId: "INV001",
+    client: "Client A",
+    total: "1000",
+    status: "Paid",
+  },
+  {
+    id: 2,
+    invoiceId: "INV002",
+    client: "Client B",
+    total: "2000",
+    status: "Draft",
+  },
+  {
+    id: 3,
+    invoiceId: "INV003",
+    client: "Client C",
+    total: "1500",
+    status: "Sent",
+  },
+  {
+    id: 4,
+    invoiceId: "INV004",
+    client: "Client D",
+    total: "2500",
+    status: "Partial Payment",
+  },
+  // داده‌های بیشتر در صورت نیاز...
+];
 
 const CustomHeader = ({
   handleFilter,
@@ -87,9 +116,6 @@ const CustomHeader = ({
 };
 
 const InvoiceList = () => {
-  const dispatch = useDispatch();
-  const store = useSelector((state) => state.invoice);
-
   const [value, setValue] = useState("");
   const [sort, setSort] = useState("desc");
   const [sortColumn, setSortColumn] = useState("id");
@@ -97,90 +123,24 @@ const InvoiceList = () => {
   const [statusValue, setStatusValue] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  useEffect(() => {
-    if (store) {
-      dispatch(
-        getData({
-          sort,
-          q: value,
-          sortColumn,
-          page: currentPage,
-          perPage: rowsPerPage,
-          status: statusValue,
-        })
-      );
-    }
-  }, [
-    dispatch,
-    value,
-    sort,
-    sortColumn,
-    currentPage,
-    rowsPerPage,
-    statusValue,
-    store,
-  ]);
-
   const handleFilter = (val) => {
     setValue(val);
-    dispatch(
-      getData({
-        sort,
-        q: val,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        status: statusValue,
-      })
-    );
   };
 
   const handlePerPage = (e) => {
-    const newRowsPerPage = parseInt(e.target.value);
-    setRowsPerPage(newRowsPerPage);
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        page: currentPage,
-        status: statusValue,
-        perPage: newRowsPerPage,
-      })
-    );
+    setRowsPerPage(parseInt(e.target.value));
   };
 
   const handleStatusValue = (e) => {
     setStatusValue(e.target.value);
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        status: e.target.value,
-      })
-    );
   };
 
   const handlePagination = (page) => {
-    const newPage = page.selected + 1;
-    setCurrentPage(newPage);
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        status: statusValue,
-        perPage: rowsPerPage,
-        page: newPage,
-      })
-    );
+    setCurrentPage(page.selected + 1);
   };
 
   const CustomPagination = () => {
-    const count = Math.ceil(store.total / rowsPerPage);
+    const count = Math.ceil(sampleData.length / rowsPerPage);
 
     return (
       <ReactPaginate
@@ -205,10 +165,6 @@ const InvoiceList = () => {
   };
 
   const dataToRender = () => {
-    if (!store || !store.data) {
-      return [];
-    }
-
     const filters = {
       q: value,
       status: statusValue,
@@ -216,28 +172,29 @@ const InvoiceList = () => {
 
     const isFiltered = Object.keys(filters).some((k) => filters[k]);
 
-    if (store.data.length > 0) {
-      return store.data;
-    } else if (store.data.length === 0 && isFiltered) {
-      return [];
-    } else {
-      return store.allData.slice(0, rowsPerPage);
+    let data = sampleData;
+
+    if (filters.q) {
+      data = data.filter((item) =>
+        item.invoiceId.toLowerCase().includes(filters.q.toLowerCase())
+      );
     }
+
+    if (filters.status) {
+      data = data.filter(
+        (item) => item.status.toLowerCase() === filters.status.toLowerCase()
+      );
+    }
+
+    return data.slice(
+      (currentPage - 1) * rowsPerPage,
+      currentPage * rowsPerPage
+    );
   };
 
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection);
     setSortColumn(column.sortField);
-    dispatch(
-      getData({
-        q: value,
-        page: currentPage,
-        sort: sortDirection,
-        status: statusValue,
-        perPage: rowsPerPage,
-        sortColumn: column.sortField,
-      })
-    );
   };
 
   return (

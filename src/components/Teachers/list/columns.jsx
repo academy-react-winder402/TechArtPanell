@@ -31,6 +31,37 @@ import {
 const initialUsers = [
   {
     id: 1,
+    invoiceId: 1,
+    fullName: "جان دو",
+    username: "johndoe",
+    email: "john.doe@example.com",
+    role: "admin",
+    avatar: "",
+    avatarColor: "light-primary",
+    currentPlan: "enterprise",
+    billing: "auto debit",
+    status: "active",
+    country: "United States",
+    contact: "(123) 456-7890",
+    company: "Company Pvt Ltd",
+  },
+  {
+    id: 2,
+    fullName: "جان دو",
+    username: "johndoe",
+    email: "john.doe@example.com",
+    role: "admin",
+    avatar: "",
+    avatarColor: "light-primary",
+    currentPlan: "enterprise",
+    billing: "auto debit",
+    status: "active",
+    country: "United States",
+    contact: "(123) 456-7890",
+    company: "Company Pvt Ltd",
+  },
+  {
+    id: 3,
     fullName: "جان دو",
     username: "johndoe",
     email: "john.doe@example.com",
@@ -169,10 +200,7 @@ const UsersTable = () => {
                       <MoreVertical size={14} className="cursor-pointer" />
                     </DropdownToggle>
                     <DropdownMenu>
-                      <DropdownItem
-                        tag={Link}
-                        to={`/apps/user/view/${user.id}`}
-                      >
+                      <DropdownItem tag={Link} to={`teacherdetail/${user.id}`}>
                         <FileText size={14} className="me-50" />
                         <span className="align-middle">جزئیات</span>
                       </DropdownItem>

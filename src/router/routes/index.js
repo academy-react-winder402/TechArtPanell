@@ -17,6 +17,7 @@ import InvoiceAdd from "../../components/add";
 import TableBasic from "../../components/coursList/corseList";
 import BlogList from "../../components/blog/list";
 import UsersList from "../../components/Teachers/list/index";
+import UserView from "../../components/Teachers/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -68,8 +69,14 @@ const Routes = [
   },
   {
     path: "/teacher",
-    element: <UsersList/>,
+    element: <UsersList />,
   },
+
+  {
+    path: "/teacherdetail/:id",
+    element: <UserView />,
+  },
+
   {
     path: "/comment",
     element: <h1>hi</h1>,

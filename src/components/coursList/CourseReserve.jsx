@@ -108,10 +108,9 @@ const avatarGroupData4 = [
   },
 ];
 
-const TableBasic = () => {
+const CourseReserve = () => {
   return (
     <>
-      <CreateAppExample />
       <Table responsive>
         <thead>
           <tr>
@@ -301,4 +300,4 @@ const TableBasic = () => {
   );
 };
 
-export default TableBasic;
+export default CourseReserve;

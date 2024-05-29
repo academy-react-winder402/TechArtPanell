@@ -8,7 +8,7 @@ import classnames from "classnames";
 import { MessageSquare } from "react-feather";
 
 // ** Custom Components
-import Sidebar from "./BlogSidebar";
+import Sidebar from "../BlogSidebar";
 import Avatar from "@components/avatar";
 import Breadcrumbs from "@components/breadcrumbs";
 
@@ -119,7 +119,7 @@ const BlogList = () => {
                     {item.comment} Comments
                   </span>
                 </Link>
-                <Link className="fw-bold" to={`/pages/blog/detail/${item.id}`}>
+                <Link className="fw-bold" to={`/post/detail/${item.id}`}>
                   Read More
                 </Link>
               </div>

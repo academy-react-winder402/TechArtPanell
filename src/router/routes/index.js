@@ -15,9 +15,13 @@ import { isObjEmpty } from "@utils";
 import InvoiceList from "../../components/list/list";
 import InvoiceAdd from "../../components/add";
 import TableBasic from "../../components/coursList/corseList";
-import BlogList from "../../components/blog/list";
 import UsersList from "../../components/Teachers/list/index";
 import UserView from "../../components/Teachers/view";
+import EmailApp from "../../components/comments";
+import CourseReserve from "../../components/coursList/CourseReserve";
+import BlogList from "../../components/blog/List";
+import BlogDetails from "../../components/blog/details";
+import BlogEdit from "../../components/blog/edit";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -62,11 +66,33 @@ const Routes = [
     path: "/course",
     element: <TableBasic />,
   },
+  {
+    path: "/CourseReserve",
+    element: <CourseReserve />,
+  },
 
   {
     path: "/post",
     element: <BlogList />,
   },
+
+  {
+    path: "/post/detail/:id",
+    element: <BlogDetails />,
+  },
+  {
+    path: "/post/detail",
+    element: <Navigate to="/post/detail/1" />,
+  },
+  {
+    path: "/post/edit/:id",
+    element: <BlogEdit />,
+  },
+  {
+    path: "/post/edit",
+    element: <Navigate to="/post/edit/1" />,
+  },
+
   {
     path: "/teacher",
     element: <UsersList />,
@@ -79,7 +105,7 @@ const Routes = [
 
   {
     path: "/comment",
-    element: <h1>hi</h1>,
+    element: <EmailApp />,
   },
   {
     path: "/event",

@@ -51,7 +51,7 @@ const BlogSidebar = () => {
             <h6 className="blog-recent-post-title">
               <Link
                 className="text-body-heading"
-                to={`/pages/blog/detail/${post.id}`}
+                to={`/post/detail/${post.id}`}
               >
                 {post.title}
               </Link>

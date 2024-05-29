@@ -1,6 +1,5 @@
 // ** Invoice Add Components
 import AddCard from "./AddCard";
-import AddActions from "./AddActions";
 
 // ** Reactstrap Imports
 import { Row, Col } from "reactstrap";
@@ -8,6 +7,7 @@ import { Row, Col } from "reactstrap";
 // ** Styles
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import "@styles/base/pages/app-invoice.scss";
+import AddActions from "./Addactions";
 
 const InvoiceAdd = () => {
   return (

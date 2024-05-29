@@ -22,29 +22,25 @@ const sampleData = [
   {
     id: 1,
     invoiceId: "INV001",
-    client: "Client A",
-    total: "1000",
+    client: "a ملیحه  ",
     status: "Paid",
   },
   {
     id: 2,
     invoiceId: "INV002",
-    client: "Client B",
-    total: "2000",
+    client: "ملیحه b",
     status: "Draft",
   },
   {
     id: 3,
     invoiceId: "INV003",
-    client: "Client C",
-    total: "1500",
+    client: "فاطمه قدمی C",
     status: "Sent",
   },
   {
     id: 4,
     invoiceId: "INV004",
-    client: "Client D",
-    total: "2500",
+    client: "مهدی D",
     status: "Partial Payment",
   },
   // داده‌های بیشتر در صورت نیاز...

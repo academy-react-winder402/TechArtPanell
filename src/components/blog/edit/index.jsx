@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 
 // ** Third Party Components
-import axios from "axios";
 import Select from "react-select";
 import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
@@ -36,8 +35,8 @@ import "@styles/base/pages/page-blog.scss";
 
 const BlogEdit = () => {
   const initialContent = `
-  <p>Cupcake ipsum dolor sit. Amet dessert donut candy chocolate bar cotton dessert candy chocolate. Candy muffin danish. Macaroon brownie jelly beans marzipan cheesecake oat cake. Carrot cake macaroon chocolate cake. Jelly brownie jelly. Marzipan pie sweet roll.</p>
-  <p>Liquorice dragée cake chupa chups pie cotton candy jujubes bear claw sesame snaps. Fruitcake chupa chups chocolate bonbon lemon drops croissant caramels lemon drops. Candy jelly cake marshmallow jelly beans dragée macaroon. Gummies sugar plum fruitcake. Candy canes candy cupcake caramels cotton candy jujubes fruitcake.</p>
+  <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.</p>
+  <p>کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد.</p>
   `;
 
   const contentBlock = htmlToDraft(initialContent);
@@ -57,14 +56,26 @@ const BlogEdit = () => {
     [imgPath, setImgPath] = useState("banner.jpg");
 
   useEffect(() => {
-    axios.get("/blog/list/data/edit").then((res) => {
-      setData(res.data);
-      setTitle(res.data.blogTitle);
-      setSlug(res.data.slug);
-      setBlogCategories(res.data.blogCategories);
-      setFeaturedImg(res.data.featuredImage);
-      setStatus(res.data.status);
-    });
+    // داده‌های فیک به جای فراخوانی API
+    const fakeData = {
+      blogTitle: "ویرایش وبلاگ",
+      slug: "blog-edit",
+      blogCategories: [
+        { value: "fashion", label: "Fashion" },
+        { value: "gaming", label: "Gaming" },
+      ],
+      featuredImage: "https://via.placeholder.com/800x400",
+      status: "Published",
+      avatar: "https://via.placeholder.com/150",
+      userFullName: "جان دو",
+      createdTime: "24 مارس 2023",
+    };
+    setData(fakeData);
+    setTitle(fakeData.blogTitle);
+    setSlug(fakeData.slug);
+    setBlogCategories(fakeData.blogCategories);
+    setFeaturedImg(fakeData.featuredImage);
+    setStatus(fakeData.status);
   }, []);
 
   const categories = [
@@ -88,8 +99,8 @@ const BlogEdit = () => {
   return (
     <div className="blog-edit-wrapper">
       <Breadcrumbs
-        title="Blog Edit"
-        data={[{ title: "Pages" }, { title: "Blog" }, { title: "Edit" }]}
+        title="ویرایش وبلاگ"
+        data={[{ title: "صفحات" }, { title: "وبلاگ" }, { title: "ویرایش" }]}
       />
       {data !== null ? (
         <Row>
@@ -114,7 +125,7 @@ const BlogEdit = () => {
                   <Row>
                     <Col md="6" className="mb-2">
                       <Label className="form-label" for="blog-edit-title">
-                        Title
+                        عنوان
                       </Label>
                       <Input
                         id="blog-edit-title"
@@ -124,7 +135,7 @@ const BlogEdit = () => {
                     </Col>
                     <Col md="6" className="mb-2">
                       <Label className="form-label" for="blog-edit-category">
-                        Category
+                        دسته‌بندی
                       </Label>
                       <Select
                         id="blog-edit-category"
@@ -141,7 +152,7 @@ const BlogEdit = () => {
                     </Col>
                     <Col md="6" className="mb-2">
                       <Label className="form-label" for="blog-edit-slug">
-                        Slug
+                        اسلاگ
                       </Label>
                       <Input
                         id="blog-edit-slug"
@@ -151,7 +162,7 @@ const BlogEdit = () => {
                     </Col>
                     <Col md="6" className="mb-2">
                       <Label className="form-label" for="blog-edit-status">
-                        Status
+                        وضعیت
                       </Label>
                       <Input
                         type="select"
@@ -159,13 +170,13 @@ const BlogEdit = () => {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                       >
-                        <option value="Published">Published</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Draft">Draft</option>
+                        <option value="Published">منتشر شده</option>
+                        <option value="Pending">در انتظار</option>
+                        <option value="Draft">پیش نویس</option>
                       </Input>
                     </Col>
                     <Col sm="12" className="mb-2">
-                      <Label className="form-label">Content</Label>
+                      <Label className="form-label">محتوا</Label>
                       <Editor
                         editorState={content}
                         onEditorStateChange={(data) => setContent(data)}
@@ -173,7 +184,7 @@ const BlogEdit = () => {
                     </Col>
                     <Col className="mb-2" sm="12">
                       <div className="border rounded p-2">
-                        <h4 className="mb-1">Featured Image</h4>
+                        <h4 className="mb-1">تصویر شاخص</h4>
                         <div className="d-flex flex-column flex-md-row">
                           <img
                             className="rounded me-2 mb-1 mb-md-0"
@@ -184,8 +195,8 @@ const BlogEdit = () => {
                           />
                           <div>
                             <small className="text-muted">
-                              Required image resolution 800x400, image size
-                              10mb.
+                              وضوح تصویر مورد نیاز 800x400، اندازه تصویر 10
+                              مگابایت.
                             </small>
 
                             <p className="my-50">
@@ -210,10 +221,10 @@ const BlogEdit = () => {
                     </Col>
                     <Col className="mt-50">
                       <Button color="primary" className="me-1">
-                        Save Changes
+                        ذخیره تغییرات
                       </Button>
                       <Button color="secondary" outline>
-                        Cancel
+                        لغو
                       </Button>
                     </Col>
                   </Row>

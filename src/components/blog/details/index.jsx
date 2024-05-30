@@ -2,7 +2,6 @@
 import { Fragment, useState, useEffect } from "react";
 
 // ** Third Party Components
-import axios from "axios";
 import classnames from "classnames";
 import {
   Share2,
@@ -55,15 +54,44 @@ const BlogDetails = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get("/blog/list/data/detail").then((res) => setData(res.data));
+    // داده‌های فیک به جای فراخوانی API
+    const fakeData = {
+      blog: {
+        title: "درک هوک‌های ری‌اکت",
+        img: "https://via.placeholder.com/800x400",
+        avatar: "https://via.placeholder.com/150",
+        userFullName: "جان دو",
+        createdTime: "24 مارس 2023",
+        tags: ["نقل قول", "مد", "بازی"],
+        content:
+          "<p>این محتوای وبلاگ است. در مورد هوک‌های ری‌اکت صحبت می‌کند...</p>",
+        comments: 42,
+        bookmarked: 120,
+      },
+      comments: [
+        {
+          userFullName: "جین اسمیت",
+          commentedAt: "1 آوریل 2023",
+          commentText: "مقاله عالی بود!",
+          avatar: "https://via.placeholder.com/150",
+        },
+        {
+          userFullName: "مایک جانسون",
+          commentedAt: "2 آوریل 2023",
+          commentText: "بسیار آموزنده، ممنون!",
+          avatar: "https://via.placeholder.com/150",
+        },
+      ],
+    };
+    setData(fakeData);
   }, []);
 
   const badgeColorsArr = {
-    Quote: "light-info",
-    Fashion: "light-primary",
-    Gaming: "light-danger",
-    Video: "light-warning",
-    Food: "light-success",
+    "نقل قول": "light-info",
+    مد: "light-primary",
+    بازی: "light-danger",
+    ویدئو: "light-warning",
+    غذا: "light-success",
   };
 
   const renderTags = () => {
@@ -105,7 +133,7 @@ const BlogDetails = () => {
                 <a href="/" onClick={(e) => e.preventDefault()}>
                   <div className="d-inline-flex align-items-center">
                     <CornerUpLeft size={18} className="me-50" />
-                    <span>Reply</span>
+                    <span>پاسخ</span>
                   </div>
                 </a>
               </div>
@@ -119,8 +147,8 @@ const BlogDetails = () => {
   return (
     <Fragment>
       <Breadcrumbs
-        title="Blog Details"
-        data={[{ title: "Pages" }, { title: "Blog" }, { title: "Details" }]}
+        title="جزئیات وبلاگ"
+        data={[{ title: "صفحات" }, { title: "وبلاگ" }, { title: "جزئیات" }]}
       />
       <div className="blog-wrapper">
         <div className="content-detached content-left">
@@ -140,7 +168,7 @@ const BlogDetails = () => {
                           imgWidth="24"
                         />
                         <div>
-                          <small className="text-muted me-25">by</small>
+                          <small className="text-muted me-25">توسط</small>
                           <small>
                             <a
                               className="text-body"
@@ -172,12 +200,12 @@ const BlogDetails = () => {
                           />
                         </div>
                         <div>
-                          <h6 className="fw-bolder">Willie Clark</h6>
+                          <h6 className="fw-bolder">ویلی کلارک</h6>
                           <CardText className="mb-0">
-                            Based in London, Uncode is a blog by Willie Clark.
-                            His posts explore modern design trends through
-                            photos and quotes by influential creatives and web
-                            designer around the world.
+                            مستقر در لندن، Uncode یک وبلاگ توسط ویلی کلارک است.
+                            پست‌های او روندهای مدرن طراحی را از طریق عکس‌ها و
+                            نقل قول‌های طراحان وب و خلاقان برجسته از سراسر جهان
+                            بررسی می‌کند.
                           </CardText>
                         </div>
                       </div>
@@ -249,11 +277,11 @@ const BlogDetails = () => {
                   </Card>
                 </Col>
                 <Col sm="12" id="blogComment">
-                  <h6 className="section-label">Comment</h6>
+                  <h6 className="section-label">نظرات</h6>
                   {renderComments()}
                 </Col>
                 <Col sm="12">
-                  <h6 className="section-label">Leave a Comment</h6>
+                  <h6 className="section-label">ارسال نظر</h6>
                   <Card>
                     <CardBody>
                       <Form
@@ -263,17 +291,17 @@ const BlogDetails = () => {
                         <Row>
                           <Col sm="6">
                             <div className="mb-2">
-                              <Input placeholder="Name" />
+                              <Input placeholder="نام" />
                             </div>
                           </Col>
                           <Col sm="6">
                             <div className="mb-2">
-                              <Input type="email" placeholder="Email" />
+                              <Input type="email" placeholder="ایمیل" />
                             </div>
                           </Col>
                           <Col sm="6">
                             <div className="mb-2">
-                              <Input type="url" placeholder="Website" />
+                              <Input type="url" placeholder="وب‌سایت" />
                             </div>
                           </Col>
                           <Col sm="12">
@@ -282,7 +310,7 @@ const BlogDetails = () => {
                                 className="mb-2"
                                 type="textarea"
                                 rows="4"
-                                placeholder="Comment"
+                                placeholder="نظر"
                               />
                             </div>
                           </Col>
@@ -293,13 +321,13 @@ const BlogDetails = () => {
                                 className="form-check-label"
                                 for="save-data-checkbox"
                               >
-                                Save my name, email, and website in this browser
-                                for the next time I comment.
+                                نام، ایمیل و وب‌سایت من را در این مرورگر ذخیره
+                                کن تا در نظرات بعدی استفاده شود.
                               </Label>
                             </div>
                           </Col>
                           <Col sm="12">
-                            <Button color="primary">Post Comment</Button>
+                            <Button color="primary">ارسال نظر</Button>
                           </Col>
                         </Row>
                       </Form>

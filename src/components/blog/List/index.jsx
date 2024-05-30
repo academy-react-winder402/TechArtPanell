@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Fragment, useState, useEffect } from "react";
 
 // ** Third Party Components
-import axios from "axios";
 import classnames from "classnames";
 import { MessageSquare } from "react-feather";
 
@@ -35,7 +34,32 @@ const BlogList = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get("/blog/list/data").then((res) => setData(res.data));
+    // داده‌های فیک به جای فراخوانی API
+    const fakeData = [
+      {
+        id: 1,
+        title: "پست وبلاگ شماره 1",
+        img: "https://via.placeholder.com/800x400",
+        avatar: "https://via.placeholder.com/150",
+        userFullName: "جان دو",
+        blogPosted: "24 مارس 2023",
+        tags: ["Fashion", "Gaming"],
+        excerpt: "این یک خلاصه کوتاه از پست وبلاگ شماره 1 است.",
+        comment: 12,
+      },
+      {
+        id: 2,
+        title: "پست وبلاگ شماره 2",
+        img: "https://via.placeholder.com/800x400",
+        avatar: "https://via.placeholder.com/150",
+        userFullName: "جین اسمیت",
+        blogPosted: "25 مارس 2023",
+        tags: ["Video", "Food"],
+        excerpt: "این یک خلاصه کوتاه از پست وبلاگ شماره 2 است.",
+        comment: 8,
+      },
+    ];
+    setData(fakeData);
   }, []);
 
   const badgeColorsArr = {
@@ -45,6 +69,7 @@ const BlogList = () => {
     Video: "light-warning",
     Food: "light-success",
   };
+
   const renderRenderList = () => {
     return data.map((item) => {
       const renderTags = () => {
@@ -93,7 +118,7 @@ const BlogList = () => {
                   imgWidth="24"
                 />
                 <div>
-                  <small className="text-muted me-25">by</small>
+                  <small className="text-muted me-25">توسط</small>
                   <small>
                     <a
                       className="text-body"
@@ -115,12 +140,10 @@ const BlogList = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <Link to={`/pages/blog/detail/${item.id}`}>
                   <MessageSquare size={15} className="text-body me-50" />
-                  <span className="text-body fw-bold">
-                    {item.comment} Comments
-                  </span>
+                  <span className="text-body fw-bold">{item.comment} نظر</span>
                 </Link>
                 <Link className="fw-bold" to={`/post/detail/${item.id}`}>
-                  Read More
+                  بیشتر بخوانید
                 </Link>
               </div>
             </CardBody>
@@ -133,8 +156,8 @@ const BlogList = () => {
   return (
     <Fragment>
       <Breadcrumbs
-        title="Blog List"
-        data={[{ title: "Pages" }, { title: "Blog" }, { title: "List" }]}
+        title="لیست وبلاگ"
+        data={[{ title: "صفحات" }, { title: "وبلاگ" }, { title: "لیست" }]}
       />
       <div className="blog-wrapper">
         <div className="content-detached content-left">

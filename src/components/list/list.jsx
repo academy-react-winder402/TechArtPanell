@@ -1,134 +1,66 @@
-// ** React Imports
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-// ** Table Columns
-import { columns } from "./columns";
-
-// ** Third Party Components
-import ReactPaginate from "react-paginate";
-import { ChevronDown } from "react-feather";
-import DataTable from "react-data-table-component";
-
-// ** Reactstrap Imports
-import { Button, Input, Row, Col, Card } from "reactstrap";
-
-// ** Styles
-import "@styles/react/apps/app-invoice.scss";
-import "@styles/react/libs/tables/react-dataTable-component.scss";
-
-// ** نمونه داده‌های محلی
-const sampleData = [
-  {
-    id: 1,
-    invoiceId: "INV001",
-    client: "a ملیحه  ",
-    status: "Paid",
-  },
-  {
-    id: 2,
-    invoiceId: "INV002",
-    client: "ملیحه b",
-    status: "Draft",
-  },
-  {
-    id: 3,
-    invoiceId: "INV003",
-    client: "فاطمه قدمی C",
-    status: "Sent",
-  },
-  {
-    id: 4,
-    invoiceId: "INV004",
-    client: "مهدی D",
-    status: "Partial Payment",
-  },
-  // داده‌های بیشتر در صورت نیاز...
-];
-
-const CustomHeader = ({
-  handleFilter,
-  value,
-  handleStatusValue,
-  statusValue,
-  handlePerPage,
-  rowsPerPage,
-}) => {
-  return (
-    <div className="invoice-list-table-header w-100 py-2">
-      <Row>
-        <Col lg="6" className="d-flex align-items-center px-0 px-lg-1">
-          <div className="d-flex align-items-center me-2">
-            <label htmlFor="rows-per-page">Show</label>
-            <Input
-              type="select"
-              id="rows-per-page"
-              value={rowsPerPage}
-              onChange={handlePerPage}
-              className="form-control ms-50 pe-3"
-            >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-            </Input>
-          </div>
-          <Button tag={Link} to="/add" color="primary">
-            Add Record
-          </Button>
-        </Col>
-        <Col
-          lg="6"
-          className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0"
-        >
-          <div className="d-flex align-items-center">
-            <label htmlFor="search-invoice">Search</label>
-            <Input
-              id="search-invoice"
-              className="ms-50 me-2 w-100"
-              type="text"
-              value={value}
-              onChange={(e) => handleFilter(e.target.value)}
-              placeholder="Search Invoice"
-            />
-          </div>
-          <Input
-            className="w-auto "
-            type="select"
-            value={statusValue}
-            onChange={handleStatusValue}
-          >
-            <option value="">Select Status</option>
-            <option value="downloaded">Downloaded</option>
-            <option value="draft">Draft</option>
-            <option value="paid">Paid</option>
-            <option value="partial payment">Partial Payment</option>
-            <option value="past due">Past Due</option>
-            <option value="sent">Sent</option>
-          </Input>
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
-const InvoiceList = () => {
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [value, setValue] = useState("");
-  const [sort, setSort] = useState("desc");
-  const [sortColumn, setSortColumn] = useState("id");
-  const [currentPage, setCurrentPage] = useState(1);
   const [statusValue, setStatusValue] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleFilter = (val) => {
-    setValue(val);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://classapi.sepehracademy.ir/api/User/UserMannage",
+        {
+          params: {
+            PageNumber: currentPage - 1,
+            RowsOfPage: rowsPerPage,
+            SortingCol: "DESC",
+            SortType: "InsertDate",
+            Query: value,
+            IsActiveUser: true,
+            IsDeletedUser: true,
+            roleId: 1,
+          },
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYjg2NjdkZS05MzRlLTQ4ZTItYWNiOC0wNDVjYWY2NTM1MzkiLCJqdGkiOiIxOGE1MGY4YS1jYmU2LTRhNGUtOWNmMi04MmI2ZTQzNmZkNGUiLCJlbWFpbCI6Im1hbGloZS5oYXNoZW1pMjAyMEBnbWFpbC5jb20iLCJVaWQiOiJuTHd3TTQ5anhSVC9mandnWWNaY2NMWmRZK2t2LzNOSHlPR3VlZW1JeVJVPUVzNzg4OTBjOTI4ZGMxYmEzMzAyYjdmODFmNjIwOGEwM2QyYjViZWI0YzkzMTQxMzc0YzlhZDQwNmFhYmY4YWFhN2I3YWQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWRtaW5pc3RyYXRvciIsIlN0dWRlbnQiXSwiZXhwIjoxNzE4NTQ5Mzg5LCJpc3MiOiJTZXBlaHJBY2FkZW15IiwiYXVkIjoiU2VwZWhyQWNhZGVteSJ9.hVUFIdEzgtRjlZOJy-41O60LXhGLv_s47B0Upokz0gc",
+          },
+        }
+      );
+      setUsers(response.data.listUser);
+      setFilteredUsers(response.data.listUser);
+      setRoles(response.data.roles);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  const handlePerPage = (e) => {
-    setRowsPerPage(parseInt(e.target.value));
+  const handleFilter = (value) => {
+    setValue(value);
+    filterUsers(value, statusValue);
   };
 
-  const handleStatusValue = (e) => {
-    setStatusValue(e.target.value);
+  const handleStatusValue = (value) => {
+    setStatusValue(value);
+    filterUsers(value, value);
+  };
+
+  const filterUsers = (query, status) => {
+    let filtered = users.filter((user) => {
+      return (
+        user.gmail.toLowerCase().includes(query.toLowerCase()) &&
+        (status === "" || user.userRoles === status)
+      );
+    });
+    setFilteredUsers(filtered);
   };
 
   const handlePagination = (page) => {
@@ -136,97 +68,104 @@ const InvoiceList = () => {
   };
 
   const CustomPagination = () => {
-    const count = Math.ceil(sampleData.length / rowsPerPage);
+    const pageCount = Math.ceil(filteredUsers.length / rowsPerPage);
 
     return (
-      <ReactPaginate
-        nextLabel=""
-        breakLabel="..."
-        previousLabel=""
-        pageCount={count || 1}
-        activeClassName="active"
-        breakClassName="page-item"
-        pageClassName="page-item"
-        breakLinkClassName="page-link"
-        nextLinkClassName="page-link"
-        pageLinkClassName="page-link"
-        nextClassName="page-item next"
-        previousLinkClassName="page-link"
-        previousClassName="page-item prev"
-        onPageChange={handlePagination}
-        forcePage={currentPage - 1}
-        containerClassName="pagination react-paginate justify-content-end p-1"
-      />
+      <div className="pagination mt-4">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() =>
+            setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
+          }
+        >
+          Previous
+        </button>
+        {Array.from({ length: pageCount }, (_, index) => (
+          <button
+            key={index}
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
+              currentPage === index + 1 ? "bg-blue-700" : ""
+            }`}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() =>
+            setCurrentPage((prevPage) => Math.min(prevPage + 1, pageCount))
+          }
+        >
+          Next
+        </button>
+      </div>
     );
-  };
-
-  const dataToRender = () => {
-    const filters = {
-      q: value,
-      status: statusValue,
-    };
-
-    const isFiltered = Object.keys(filters).some((k) => filters[k]);
-
-    let data = sampleData;
-
-    if (filters.q) {
-      data = data.filter((item) =>
-        item.invoiceId.toLowerCase().includes(filters.q.toLowerCase())
-      );
-    }
-
-    if (filters.status) {
-      data = data.filter(
-        (item) => item.status.toLowerCase() === filters.status.toLowerCase()
-      );
-    }
-
-    return data.slice(
-      (currentPage - 1) * rowsPerPage,
-      currentPage * rowsPerPage
-    );
-  };
-
-  const handleSort = (column, sortDirection) => {
-    setSort(sortDirection);
-    setSortColumn(column.sortField);
   };
 
   return (
-    <div className="invoice-list-wrapper">
-      <Card>
-        <div className="invoice-list-dataTable react-dataTable">
-          <DataTable
-            noHeader
-            pagination
-            sortServer
-            paginationServer
-            subHeader
-            columns={columns}
-            responsive
-            onSort={handleSort}
-            data={dataToRender()}
-            sortIcon={<ChevronDown />}
-            className="react-dataTable"
-            defaultSortField="invoiceId"
-            paginationDefaultPage={currentPage}
-            paginationComponent={CustomPagination}
-            subHeaderComponent={
-              <CustomHeader
-                value={value}
-                statusValue={statusValue}
-                rowsPerPage={rowsPerPage}
-                handleFilter={handleFilter}
-                handlePerPage={handlePerPage}
-                handleStatusValue={handleStatusValue}
-              />
-            }
-          />
-        </div>
-      </Card>
+    <div className="user-list container mx-auto mt-8">
+      <h1 className="text-3xl font-bold mb-4">لیست کاربران</h1>
+      <input
+        type="text"
+        className="border border-gray-400 rounded py-2 px-4 mb-4"
+        placeholder="جستجو بر اساس Gmail"
+        value={value}
+        onChange={(e) => handleFilter(e.target.value)}
+      />
+      <select
+        className="border border-gray-400 rounded py-2 px-4 mb-4"
+        value={statusValue}
+        onChange={(e) => handleStatusValue(e.target.value)}
+      >
+        <option value="">انتخاب نقش</option>
+        {roles.map((role) => (
+          <option key={role.id} value={role.roleName}>
+            {role.roleName}
+          </option>
+        ))}
+      </select>
+      <table className="w-full border-collapse border border-gray-400">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="border border-gray-400 py-2 px-4">شناسه</th>
+            <th className="border border-gray-400 py-2 px-4">ایمیل</th>
+            <th className="border border-gray-400 py-2 px-4">شماره تلفن</th>
+            <th className="border border-gray-400 py-2 px-4">تاریخ ثبت</th>
+            <th className="border border-gray-400 py-2 px-4">
+              درصد تکمیل پروفایل
+            </th>
+            <th className="border border-gray-400 py-2 px-4">جنسیت</th>
+            <th className="border border-gray-400 py-2 px-4">نقش کاربری</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsers.map((user) => (
+            <tr key={user.id} className="bg-white">
+              <td className="border border-gray-400 py-2 px-4">{user.id}</td>
+              <td className="border border-gray-400 py-2 px-4">{user.gmail}</td>
+              <td className="border border-gray-400 py-2 px-4">
+                {user.phoneNumber}
+              </td>
+              <td className="border border-gray-400 py-2 px-4">
+                {new Date(user.insertDate).toLocaleString()}
+              </td>
+              <td className="border border-gray-400 py-2 px-4">
+                {user.profileCompletionPercentage}
+              </td>
+              <td className="border border-gray-400 py-2 px-4">
+                {user.gender ? "مرد" : "زن"}
+              </td>
+              <td className="border border-gray-400 py-2 px-4">
+                {user.userRoles}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <CustomPagination />
     </div>
   );
 };
 
-export default InvoiceList;
+export default UserList;

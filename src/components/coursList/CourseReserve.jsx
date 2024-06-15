@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 // ** Custom Components
 import AvatarGroup from "@components/avatar-group";
 
@@ -24,97 +27,37 @@ import {
 } from "reactstrap";
 import CreateAppExample from "./addCourse/addCourse";
 
-const avatarGroupData1 = [
-  {
-    title: "Lilian",
-    img: avatar1,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Alberto",
-    img: avatar2,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Bruce",
-    img: avatar3,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-];
-
-const avatarGroupData2 = [
-  {
-    title: "Diana",
-    img: avatar1,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Rey",
-    img: avatar2,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "James",
-    img: avatar3,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-];
-
-const avatarGroupData3 = [
-  {
-    title: "Lee",
-    img: avatar1,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Mario",
-    img: avatar2,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Oswald",
-    img: avatar3,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-];
-
-const avatarGroupData4 = [
-  {
-    title: "Christie",
-    img: avatar1,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Barnes",
-    img: avatar2,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-  {
-    title: "Arthur",
-    img: avatar3,
-    imgHeight: 26,
-    imgWidth: 26,
-  },
-];
-
 const CourseReserve = () => {
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://classapi.sepehracademy.ir/api/CourseReserve", {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYjg2NjdkZS05MzRlLTQ4ZTItYWNiOC0wNDVjYWY2NTM1MzkiLCJqdGkiOiIxOGE1MGY4YS1jYmU2LTRhNGUtOWNmMi04MmI2ZTQzNmZkNGUiLCJlbWFpbCI6Im1hbGloZS5oYXNoZW1pMjAyMEBnbWFpbC5jb20iLCJVaWQiOiJuTHd3TTQ5anhSVC9mandnWWNaY2NMWmRZK2t2LzNOSHlPR3VlZW1JeVJVPUVzNzg4OTBjOTI4ZGMxYmEzMzAyYjdmODFmNjIwOGEwM2QyYjViZWI0YzkzMTQxMzc0YzlhZDQwNmFhYmY4YWFhN2I3YWQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWRtaW5pc3RyYXRvciIsIlN0dWRlbnQiXSwiZXhwIjoxNzE4NTQ5Mzg5LCJpc3MiOiJTZXBlaHJBY2FkZW15IiwiYXVkIjoiU2VwZWhyQWNhZGVteSJ9.hVUFIdEzgtRjlZOJy-41O60LXhGLv_s47B0Upokz0gc`,
+        },
+      })
+      .then((response) => {
+        setCourses(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching courses:", error);
+      });
+  }, []);
+
+  const iconMapper = {
+    angular: angular,
+    react: react,
+    vuejs: vuejs,
+    bootstrap: bootstrap,
+  };
+
   return (
     <>
       <Table responsive>
         <thead>
           <tr>
-            <th>نام درس </th>
+            <th>نام درس</th>
             <th>نام استاد</th>
             <th>دانش آموزان</th>
             <th>وضعیت</th>
@@ -122,178 +65,63 @@ const CourseReserve = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <img
-                className="me-75"
-                src={angular}
-                alt="angular"
-                height="20"
-                width="20"
-              />
-              <span className="align-middle fw-bold">Angular Project</span>
-            </td>
-            <td>Peter Charles</td>
-            <td>
-              <AvatarGroup data={avatarGroupData1} />
-            </td>
-            <td>
-              <Badge pill color="light-primary" className="me-1">
-                Active
-              </Badge>
-            </td>
-            <td>
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  className="icon-btn hide-arrow"
-                  color="transparent"
-                  size="sm"
-                  caret
+          {courses.map((course, index) => (
+            <tr key={index}>
+              <td>
+                <img
+                  className="me-75"
+                  src={iconMapper[course.icon]}
+                  alt={course.icon}
+                  height="20"
+                  width="20"
+                />
+                <span className="align-middle fw-bold">
+                  {course.studentName}
+                </span>
+              </td>
+              <td>{course.instructor}</td>
+              <td></td>
+              <td>
+                <Badge
+                  pill
+                  color={
+                    course.status === "Active"
+                      ? "light-primary"
+                      : course.status === "Completed"
+                      ? "light-success"
+                      : course.status === "Scheduled"
+                      ? "light-info"
+                      : "light-warning"
+                  }
+                  className="me-1"
                 >
-                  <MoreVertical size={15} />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Edit className="me-50" size={15} />{" "}
-                    <span className="align-middle">Edit</span>
-                  </DropdownItem>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Trash className="me-50" size={15} />{" "}
-                    <span className="align-middle">Delete</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img
-                className="me-75"
-                src={react}
-                alt="react"
-                height="20"
-                width="20"
-              />
-              <span className="align-middle fw-bold">React Project</span>
-            </td>
-            <td>Ronald Frest</td>
-            <td>
-              <AvatarGroup data={avatarGroupData2} />
-            </td>
-            <td>
-              <Badge pill color="light-success" className="me-1">
-                Completed
-              </Badge>
-            </td>
-            <td>
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  className="icon-btn hide-arrow"
-                  color="transparent"
-                  size="sm"
-                  caret
-                >
-                  <MoreVertical size={15} />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Edit className="me-50" size={15} />{" "}
-                    <span className="align-middle">Edit</span>
-                  </DropdownItem>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Trash className="me-50" size={15} />{" "}
-                    <span className="align-middle">Delete</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img
-                className="me-75"
-                src={vuejs}
-                alt="vuejs"
-                height="20"
-                width="20"
-              />
-              <span className="align-middle fw-bold">Vuejs Project</span>
-            </td>
-            <td>Jack Obes</td>
-            <td>
-              <AvatarGroup data={avatarGroupData3} />
-            </td>
-            <td>
-              <Badge pill color="light-info" className="me-1">
-                Scheduled
-              </Badge>
-            </td>
-            <td>
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  className="icon-btn hide-arrow"
-                  color="transparent"
-                  size="sm"
-                  caret
-                >
-                  <MoreVertical size={15} />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Edit className="me-50" size={15} />{" "}
-                    <span className="align-middle">Edit</span>
-                  </DropdownItem>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Trash className="me-50" size={15} />{" "}
-                    <span className="align-middle">Delete</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img
-                className="me-75"
-                src={bootstrap}
-                alt="bootstrap"
-                height="20"
-                width="20"
-              />
-              <span className="align-middle fw-bold">Bootstrap Project</span>
-            </td>
-            <td>Jerry Milton</td>
-            <td>
-              <AvatarGroup data={avatarGroupData4} />
-            </td>
-            <td>
-              <Badge pill color="light-warning" className="me-1">
-                Pending
-              </Badge>
-            </td>
-            <td>
-              <UncontrolledDropdown>
-                <DropdownToggle
-                  className="icon-btn hide-arrow"
-                  color="transparent"
-                  size="sm"
-                  caret
-                >
-                  <MoreVertical size={15} />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Edit className="me-50" size={15} />{" "}
-                    <span className="align-middle">Edit</span>
-                  </DropdownItem>
-                  <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
-                    <Trash className="me-50" size={15} />{" "}
-                    <span className="align-middle">Delete</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </td>
-          </tr>
+                  {course.status}
+                </Badge>
+              </td>
+              <td>
+                <UncontrolledDropdown>
+                  <DropdownToggle
+                    className="icon-btn hide-arrow"
+                    color="transparent"
+                    size="sm"
+                    caret
+                  >
+                    <MoreVertical size={15} />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
+                      <Edit className="me-50" size={15} />{" "}
+                      <span className="align-middle">Edit</span>
+                    </DropdownItem>
+                    <DropdownItem href="/" onClick={(e) => e.preventDefault()}>
+                      <Trash className="me-50" size={15} />{" "}
+                      <span className="align-middle">Delete</span>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </>

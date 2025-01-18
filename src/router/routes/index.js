@@ -22,6 +22,7 @@ import CourseReserve from "../../components/coursList/CourseReserve";
 import BlogList from "../../components/blog/List";
 import BlogDetails from "../../components/blog/details";
 import BlogEdit from "../../components/blog/edit";
+import CalendarComponent from "../../components/calendar";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -52,7 +53,8 @@ const Routes = [
   },
   {
     path: "/home",
-    element: <Home />,
+    // element: <Home />,
+    element: <CalendarComponent />,
   },
   {
     path: "/user",

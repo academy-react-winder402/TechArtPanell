@@ -81,12 +81,9 @@ const CreateAppExample = () => {
         <CardBody className="text-center">
           <Package className="font-large-2 mb-1" />
           <CardTitle tag="h5">Create App</CardTitle>
-          <CardText>
-            Provide application data with this form modal popup example, easy to
-            use in any page.
-          </CardText>
+          <CardText>ساخت دوره جدید</CardText>
           <Button color="primary" onClick={() => setShow(true)}>
-            Show
+            نمایش
           </Button>
         </CardBody>
       </Card>
@@ -100,10 +97,8 @@ const CreateAppExample = () => {
           toggle={() => setShow(!show)}
         ></ModalHeader>
         <ModalBody className="pb-3 px-sm-3">
-          <h1 className="text-center mb-1">Create App</h1>
-          <p className="text-center mb-2">
-            Provide application data with this form
-          </p>
+          <h1 className="text-center mb-1">دوره جدید</h1>
+          <p className="text-center mb-2"></p>
           <Wizard
             ref={ref}
             steps={steps}
